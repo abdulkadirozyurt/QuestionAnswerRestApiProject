@@ -1,10 +1,11 @@
 import express from "express";
-import { authenticationRoute } from "./authenticationRouter";
-import { questionRoute } from "./questionRouter";
+import { authenticationRouter } from "./authenticationRouter.js";
+import { questionRouter } from "./questionRouter.js";
 
-const router = express.Router();
 
-router.use("/authentications", authenticationRoute);
-router.use("/questions", questionRoute);
+const mainRouter = express.Router();
 
-export { mainRouter };
+mainRouter.use("/authentications", authenticationRouter);
+mainRouter.use("/questions", questionRouter);
+
+export {mainRouter} ;
