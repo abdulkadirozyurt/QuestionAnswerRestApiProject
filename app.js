@@ -1,13 +1,21 @@
-import express from "express";
+import express, { Router } from "express";
 import dotenv from "dotenv";
+import { mainRouter } from "./routers/mainRouter";
 
-const app = express();
 dotenv.config();
+const app = express();
 const PORT = process.env.PORT;
+
+
+//--------------------------
 
 app.get("/", (req, res) => {
   res.send("merhaba express");
 });
+//--------------------------
+
+
+app.use("/api", mainRouter);
 
 app.listen(PORT, () => {
   console.log(
