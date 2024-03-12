@@ -3,7 +3,7 @@ import UserModel from "../models/user.js";
 const register = async (req, res, next) => {
   const name = "Hasan Alkan";
   const email = "halkan@gmail.com";
-  const password = "12345";  // !!!!!!
+  const password = "12345";  // !!!!!! validation error 
 
   //async await
   const user = await UserModel.create({
