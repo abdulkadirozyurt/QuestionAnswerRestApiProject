@@ -1,9 +1,9 @@
 import UserModel from "../models/user.js";
 
 const register = async (req, res, next) => {
-  const name = "Abdulkadir Özyurt";
-  const email = "abdulkadir.ozyurt@gmail.com";
-  const password = "123456";
+  const name = "Hasan Alkan";
+  const email = "halkan@gmail.com";
+  const password = "12345";  // !!!!!!
 
   //async await
   const user = await UserModel.create({
