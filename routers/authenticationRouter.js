@@ -1,13 +1,9 @@
 import express from "express";
+import { register } from "../controllers/authenticationsController.js";
+
 // api/authentications
-const authenticationRouter = express.Router(); // bu express.Router aslında bir middleware
-
-authenticationRouter.get("/", (req, res) => {
-  res.send("Authentication Home Page");
-});
-
-authenticationRouter.get("/register", (req, res) => {
-  res.send("Authentication Register Page");
-});
+// bu express.Router aslında bir middleware
+const authenticationRouter = express.Router();
+authenticationRouter.post("/register", register);
 
 export { authenticationRouter };

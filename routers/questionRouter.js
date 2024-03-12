@@ -1,13 +1,8 @@
 import express from "express";
+import { getAllQuestions } from "../controllers/questionsController.js";
 // api/questions
 const questionRouter = express.Router(); // bu express.Router aslında bir middleware
 
-questionRouter.get("/", (req, res) => {
-  res.send("Question Home Page");
-});
-
-questionRouter.get("/delete", (req, res) => {
-  res.send("Questions Delete Page");
-});
+questionRouter.get("/", getAllQuestions);
 
 export { questionRouter };
