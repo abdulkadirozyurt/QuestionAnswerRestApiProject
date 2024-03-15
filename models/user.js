@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+import jwt from "jsonwebtoken";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -53,12 +54,27 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+// userSchema methods
+userSchema.methods.generateJwtFromUser = function () {
+  const { JWT_SECRET_KEY, JWT_EXPIRE } = process.env;
+
+  const payload = {
+    id: this._id,
+    name: this.name,
+  };
+
+  const token = jwt.sign(payload, JWT_SECRET_KEY, {
+    expiresIn: JWT_EXPIRE,
+  });
+
+  return token;
+};
+
 // pre hook: kaydetmeden hemen önce çalışır
 userSchema.pre("save", function (next) {
-
   // Eğer parola değiştirilmediyse, bir sonraki middleware'e geç
-  if (!this.isModified("password")) return next(); 
-  
+  if (!this.isModified("password")) return next();
+
   // Parolayı hashle ve modelde güncelle
   bcrypt.hash(this.password, 10, (err, hash) => {
     if (err) return next(err);
