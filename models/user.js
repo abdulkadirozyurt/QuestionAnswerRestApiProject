@@ -1,3 +1,4 @@
+import bcrypt from "bcrypt";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -50,6 +51,22 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+});
+
+// pre hook: kaydetmeden hemen önce çalışır
+userSchema.pre("save", function (next) {
+
+  // Eğer parola değiştirilmediyse, bir sonraki middleware'e geç
+  if (!this.isModified("password")) return next(); 
+  
+  // Parolayı hashle ve modelde güncelle
+  bcrypt.hash(this.password, 10, (err, hash) => {
+    if (err) return next(err);
+    // Hashlenmiş parolayı şema üzerinde güncelle
+    this.password = hash;
+
+    next();
+  });
 });
 
 const UserModel = mongoose.model("User", userSchema);
