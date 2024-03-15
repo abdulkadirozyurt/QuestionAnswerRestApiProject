@@ -11,7 +11,7 @@ const customErrorHandler = (err, req, res, next) => {
   if (err.name === "ValidationError") {
     customError = new CustomError(err.message, 400);
   }
-  // console.log("--ErrorName-> ",customError.name," --ErrorMessage ->", customError.message, " --ErrorStatus ->",customError.status);
+  console.log("--ErrorName-> ",customError.name," --ErrorMessage ->", customError.message, " --ErrorStatus ->",customError.status);
 
   res.status(customError.status || 500).json({
     success: false,

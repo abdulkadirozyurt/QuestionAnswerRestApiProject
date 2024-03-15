@@ -3,21 +3,23 @@ import asyncErrorWrapper from "express-async-handler";
 import { CustomError } from "../helpers/error/CustomError.js";
 
 const register = asyncErrorWrapper(async (req, res, next) => {
-  const name = "Hasan Alkan";
-  const email = "halkan@gmail.com";
-  const password = "12345"; // !!!!!! validation error
+  /**
+   *
+   */
 
-  try {
-    const user = await UserModel.create({
-      name,
-      email,
-      password,
-    });
-    res.status(200).json({
-      success: true,
-      data: user,
-    });
-  } 
+  // request body'sinden destructing yöntemi ile bilgileri aldık
+  const { name, email, password, role } = req.body;
+
+  const user = await UserModel.create({
+    name,
+    email,
+    password,
+    role,
+  });
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
 });
 
 const errorTest = (req, res, next) => {

@@ -7,6 +7,9 @@ import { customErrorHandler } from "./middlewares/errors/customErrorHandler.js";
 dotenv.config();
 dbConfig();
 const app = express();
+
+// express body middleware
+app.use(express.json())
 const PORT = process.env.PORT;
 
 
