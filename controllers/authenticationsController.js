@@ -1,6 +1,7 @@
 import UserModel from "../models/user.js";
 import asyncErrorWrapper from "express-async-handler";
 import { CustomError } from "../helpers/error/CustomError.js";
+import sendJwtToClient from "../helpers/authorization/sendJwttoclient.js";
 
 const register = asyncErrorWrapper(async (req, res, next) => {
   /**
@@ -17,12 +18,8 @@ const register = asyncErrorWrapper(async (req, res, next) => {
     role,
   });
 
-  const token = user.generateJwtFromUser();
-console.log(token)
-  res.status(200).json({
-    success: true,
-    data: user,
-  });
+  sendJwtToClient(user,res);
+  
 });
 
 const errorTest = (req, res, next) => {
