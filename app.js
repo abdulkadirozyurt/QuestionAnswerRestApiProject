@@ -1,8 +1,9 @@
 import dotenv from "dotenv";
-import { dbConfig } from "./config.js";
-import express, { Router } from "express";
-import { mainRouter } from "./routers/mainRouter.js";
-import { customErrorHandler } from "./middlewares/errors/customErrorHandler.js";
+import {dbConfig} from "./config.js";
+import express from "express";
+import {indexRouter} from "./routers/indexRouter.js";
+import {customErrorHandler} from "./middlewares/errors/customErrorHandler.js";
+
 
 dotenv.config();
 dbConfig();
@@ -14,12 +15,13 @@ const PORT = process.env.PORT;
 
 
 
+
 app.get("/", (req, res) => {
   res.send("merhaba express");
 });
 
 
-app.use("/api", mainRouter);
+app.use("/api", indexRouter);
 
 // Kendi Error Handler'ımızı yazalım
 

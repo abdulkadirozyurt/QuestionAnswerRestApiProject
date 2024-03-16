@@ -1,88 +1,57 @@
+
 import bcrypt from "bcrypt";
-import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please provide a name"],
-  },
-  email: {
-    type: String,
-    required: [true, "Please provide an email"],
-    unique: [true, "This email already exists"],
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      "Please provide a valid email",
-    ],
-  },
-  role: {
-    type: String,
-    default: "user",
-    enum: ["user", "admin"],
-  },
-  password: {
-    type: String,
-    minlength: [6, "Password should be at least 6 characters long"],
-    select: false,
-    required: [true, "Please provide a password"],
-    select: false, // This will not return the password when we query the user
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  title: {
-    type: String,
-  },
-  about: {
-    type: String,
-  },
-  place: {
-    type: String,
-  },
-  website: {
-    type: String,
-  },
-  profile_image: {
-    type: String,
-    default: "default.jpg",
-  },
-  blocked: {
-    type: Boolean,
-    default: false,
-  },
+    place: {type: String},
+    website: {type: String},
+    blocked: {type: Boolean, default: false},
+    createdAt: {type: Date, default: Date.now},
+    title: {type: String},
+    about: {type: String},
+    profile_image: {type: String, default: "default.jpg"},
+    role: {type: String, default: "user", enum: ["user", "admin"]},
+    name: {type: String, required: [true, "Please provide a name"]},
+    password: {
+        type: String,
+        minlength: [6, "Password should be at least 6 characters long"],
+        select: false,
+        required: [true, "Please provide a password"],
+
+    },
+    email: {
+        type: String,
+        required: [true, "Please provide an email"],
+        unique: true,
+        match: [
+            /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+            "Please provide a valid email",
+        ],
+    },
 });
 
 // userSchema methods
 userSchema.methods.generateJwtFromUser = function () {
-  const { JWT_SECRET_KEY, JWT_EXPIRE } = process.env;
+    const {JWT_SECRET_KEY, JWT_EXPIRE} = process.env;
+    const payload = {id: this._id, name: this.name};
 
-  const payload = {
-    id: this._id,
-    name: this.name,
-  };
+    const token = jwt.sign(payload, JWT_SECRET_KEY, {expiresIn: JWT_EXPIRE});
 
-  const token = jwt.sign(payload, JWT_SECRET_KEY, {
-    expiresIn: JWT_EXPIRE,
-  });
-
-  return token;
+    return token;
 };
 
-// pre hook: kaydetmeden hemen önce çalışır
+// KAYIT İŞLEMİNDEN HEMEN ÖNCE ÇALIŞIR
+// 1- Eğer parola değiştirilmediyse, bir sonraki middleware'e geç
+// 2- Parolayı hashle ve modelde güncelle
+// 3- Hashlenmiş parolayı şema üzerinde güncelle
 userSchema.pre("save", function (next) {
-  // Eğer parola değiştirilmediyse, bir sonraki middleware'e geç
-  if (!this.isModified("password")) return next();
-
-  // Parolayı hashle ve modelde güncelle
-  bcrypt.hash(this.password, 10, (err, hash) => {
-    if (err) return next(err);
-    // Hashlenmiş parolayı şema üzerinde güncelle
-    this.password = hash;
-
-    next();
-  });
+    if (!this.isModified("password")) return next();
+    bcrypt.hash(this.password, 10, (err, hash) => {
+        if (err) return next(err);
+        this.password = hash;
+        next();
+    });
 });
 
 const UserModel = mongoose.model("User", userSchema);

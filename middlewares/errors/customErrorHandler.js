@@ -11,15 +11,19 @@ const customErrorHandler = (err, req, res, next) => {
   if (err.name === "ValidationError") {
     customError = new CustomError(err.message, 400);
   }
-  if (err.code===11000) {
-    // Duplicate Key 
-    customError=new CustomError("Duplicate Key Found : Check Your Input",400)
+  if (err.code === 11000) {
+    // Duplicate Key
+    customError = new CustomError(
+      "Duplicate Key Found : Check Your Input",
+      400
+    );
   }
-  console.log("--ErrorName-> ",customError.name," --ErrorMessage ->", customError.message, " --ErrorStatus ->",customError.status);
-
+  console.log("--ErrorName    ->",customError.name);
+  console.log("--ErrorMessage ->",customError.message);
+  console.log("--ErrorStatus  ->",customError.status);
   res.status(customError.status || 500).json({
     success: false,
-    message: customError.message ,
+    message: customError.message,
   });
 };
 
