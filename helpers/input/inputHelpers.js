@@ -1,4 +1,4 @@
-import  bcrypt  from "bcrypt";
+import bcrypt from "bcrypt";
 
 /**
  * Kullanıcı, email veya password
@@ -10,19 +10,32 @@ const validateUserInput = (email, password) => {
   return email && password;
 };
 
-
-
 /**
- * 
- * @param {*} password 
- * @param {*} hashedPassword 
- * @returns girilen parola ile hash'lenmiş parolayı karşılaştırır, 
+ *
+ * @param {*} password
+ * @param {*} hashedPassword
+ * @returns girilen parola ile hash'lenmiş parolayı karşılaştırır,
  * boolean bir değer döndürür
  */
-const comparePassword = async (password, hashedPassword) => {
-  return await bcrypt.compareSync(password, hashedPassword)
 
-  
+
+const comparePassword = (password, hashedPassword) => {
+  const passwordMatch =  bcrypt.compareSync(password, hashedPassword);
+  if (!passwordMatch) {
+    return false
+  }
+  else{
+    return true
+  }
 };
+
+
+
+
+
+
+
+
+
 
 export { validateUserInput, comparePassword };

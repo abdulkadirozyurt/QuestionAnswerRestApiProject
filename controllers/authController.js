@@ -1,18 +1,11 @@
 import UserModel from "../models/user.js";
 import asyncErrorWrapper from "express-async-handler";
-import { sendJwtToClient } from "../helpers/authorization/tokenHelpers.js";
-import {
-  comparePassword,
-  validateUserInput,
-} from "../helpers/input/inputHelpers.js";
 import { CustomError } from "../helpers/error/CustomError.js";
+import { sendJwtToClient } from "../helpers/authorization/tokenHelpers.js";
+import { comparePassword,validateUserInput} from "../helpers/input/inputHelpers.js";
 
 const register = asyncErrorWrapper(async (req, res, next) => {
-  /**
-   *
-   */
-
-  // request body'sinden destructing yöntemi ile bilgileri aldık
+    // request body'sinden destructing yöntemi ile bilgileri aldık
   const { name, email, password, role } = req.body;
 
   const user = await UserModel.create({
