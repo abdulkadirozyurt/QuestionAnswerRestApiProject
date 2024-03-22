@@ -18,24 +18,15 @@ const validateUserInput = (email, password) => {
  * boolean bir değer döndürür
  */
 
-
 const comparePassword = (password, hashedPassword) => {
-  const passwordMatch =  bcrypt.compareSync(password, hashedPassword);
-  if (!passwordMatch) {
-    return false
-  }
-  else{
-    return true
-  }
+  // const passwordMatch = bcrypt.compareSync(password, hashedPassword);
+  // if (!passwordMatch) {
+  //   return false;
+  // } else {
+  //   return true;
+  // }
+
+  return bcrypt.compareSync(password, hashedPassword);
 };
-
-
-
-
-
-
-
-
-
 
 export { validateUserInput, comparePassword };
