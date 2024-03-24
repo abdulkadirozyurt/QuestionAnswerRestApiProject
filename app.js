@@ -1,25 +1,25 @@
+import path from "path";
 import dotenv from "dotenv";
-import {dbConfig} from "./config.js";
 import express from "express";
-import {indexRouter} from "./routers/indexRouter.js";
-import {customErrorHandler} from "./middlewares/errors/customErrorHandler.js";
-
+import { fileURLToPath } from "url";
+import { dbConfig } from "./config.js";
+import { indexRouter } from "./routers/indexRouter.js";
+import { customErrorHandler } from "./middlewares/errors/customErrorHandler.js";
 
 dotenv.config();
 dbConfig();
 const app = express();
 
 // express body middleware
-app.use(express.json())
+app.use(express.json());
 const PORT = process.env.PORT;
 
-
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.get("/", (req, res) => {
   res.send("merhaba express");
 });
-
 
 app.use("/api", indexRouter);
 
@@ -33,6 +33,9 @@ app.use("/api", indexRouter);
 // });
 
 app.use(customErrorHandler);
+
+// static files
+app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(PORT, () => {
   console.log(
