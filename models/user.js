@@ -5,11 +5,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
     place: {type: String},
+    title: {type: String},
+    about: {type: String},
     website: {type: String},
     blocked: {type: Boolean, default: false},
     createdAt: {type: Date, default: Date.now},
-    title: {type: String},
-    about: {type: String},
     profile_image: {type: String, default: "default.jpg"},
     role: {type: String, default: "user", enum: ["user", "admin"]},
     name: {type: String, required: [true, "Please provide a name"]},
